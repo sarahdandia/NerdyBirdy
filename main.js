@@ -114,6 +114,7 @@ var play_state = {
         this.game.time.reset();
         this.game.time.events.remove(this.timer);
         music.stop();
+        this.game.input.keyboard.clearCaptures();
         this.game.state.start("menu")
     },
     add_one_cloud: function (e, t) {
