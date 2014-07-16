@@ -142,7 +142,7 @@ var play_state = {
                 xVal = 450
             }
             do {
-                nyVal = Math.floor(Math.random() * 5) + 1;
+                nyVal = Math.floor(Math.random() * 6);
                 nyVal = nyVal * 100
             } while (nyVal == yVal);
             yVal = nyVal;
