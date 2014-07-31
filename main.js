@@ -1,169 +1,145 @@
-function submitClick() {
-    if (elapsedtime >= 10800) {
-        alert("Wow, how long have you been playing? Sorry, but your score could not be submitted. :(");
-        return
-    }
-    var e = prompt("You are submitting your score of " + elapsedtime + " seconds! Please enter your initials (2 letter maximum):", "??");
-    if (e.length > 2) {
-        do {
-            e = prompt("Please enter your initials only (2 letter maximum):", "??")
-        } while (e.length > 2)
-    }
-    if (e != null) {
-        Clay.ready(function () {
-            var t = new Clay.Leaderboard({
-                id: 4227
-            });
-            t.post({
-                score: elapsedtime,
-                name: e
-            }, function (e) {})
-        });
-        button.visible = false
-    }
-}
-
-function playClick() {
-    this.game.state.start("play");
-    this.game.time.reset();
-    music.play()
-}
 var load_state = {
     preload: function () {
-        this.game.load.image("sky", "assets/sky1.png");
-        this.game.load.image("birdy", "assets/nerdy.png");
-        this.game.load.image("cloud", "assets/cloud.png");
-        this.game.load.image("submit", "assets/submitbutton.png");
-        this.game.load.image("replay", "assets/playbutton.png");
-        this.game.load.image("startbutton", "assets/play.png");
-        this.game.load.audio("fireflies", ["assets/Fireflies.m4a", "assets/Fireflies.ogg"])
+        game.load.image("sky", "assets/sky1.png");
+        game.load.image("birdy", "assets/nerdy.png");
+        game.load.image("cloud", "assets/cloud.png");
+        game.load.image("submitButton", "assets/submitbutton.png");
+        game.load.image("replayButton", "assets/playbutton.png");
+        game.load.image("startbutton", "assets/play.png");
+        game.load.audio("fireflies", ["assets/Fireflies.m4a", "assets/Fireflies.ogg"])
     },
     create: function () {
-        this.game.stage.backgroundColor = "#87def9";
-        this.game.state.start("menu")
+        game.stage.backgroundColor = "#87def9";
+        game.state.start("menu")
     }
 };
+
 var menu_state = {
     create: function () {
-        this.sky = this.game.add.sprite(0, 0, "sky");
+        game.add.sprite(0, 0, "sky");
         music = game.add.audio("fireflies");
-        var e = game.world.width / 2,
-            t = game.world.height / 2;
-        var n = {
+        var centerX = game.world.width / 2; // find center of the screen
+        var centerY = game.world.height / 2;
+        var style = { // set styling for game text
             font: '30px "Raleway"',
             fill: "#000000"
         };
-        if (elapsedtime > 0) {
-            var r = this.game.add.text(e - 75, t - 150, "Game Over!", n);
-            var i = this.game.add.text(e, t - 50, "You survived for " + elapsedtime + " seconds", n);
-            button = this.game.add.button(e - 140, t + 100, "submit", submitClick, this, 2, 1, 0);
-            pbutton = this.game.add.button(e - 140, t, "replay", playClick, this, 2, 1, 0);
-            i.anchor.setTo(.5, .5)
-        } else {
-            sbutton = this.game.add.button(e - 140, t + 25, "startbutton", this.start, this, 2, 1, 0);
-            var s = this.game.add.text(e, t - 25, "Press Spacebar to Jump!", n);
-            s.anchor.setTo(.5, .5)
+        if (elapsedtime > 0) {   // if user has already played one round
+            game.add.text(centerX - 75, centerY - 150, "Game Over!", style);
+            game.add.text(centerX - 185, centerY - 75, "You survived for " + elapsedtime + " seconds", style);
+            submit = game.add.button(centerX - 140, centerY + 100, "submitButton", this.submitClick, this, 2, 1, 0);
+            game.add.button(centerX - 140, centerY, "replayButton", this.start, this, 2, 1, 0);
+        } else {  // this is the first round for user
+            game.add.button(centerX - 140, centerY + 25, "startbutton", this.start, this, 2, 1, 0);
+            game.add.text(centerX - 165, centerY - 75, "Press Spacebar to Jump!", style);
         }
     },
     start: function () {
-        playClick()
+        game.time.reset(); // restart time of game
+        music.play("",0,1,true,true); // play the music
+        game.state.start("play");
+    },
+    submitClick: function() {
+       if (elapsedtime >= 10800) {
+            alert("Wow, how long have you been playing? Sorry, but your score could not be submitted.");
+            return;
+        } 
+        var userInitials = prompt("You are submitting your score of " + elapsedtime + " seconds! Please enter your initials (2 letter maximum):", "??");
+        if (userInitials.length > 2) {
+            do {
+                userInitials = prompt("Please enter your initials only (2 letter maximum):", "??")
+            } while (userInitials.length > 2)
+        }
+        if (userInitials != null) {
+            Clay.ready(function () { // access Clay leaderboard
+                var scoreBoard = new Clay.Leaderboard({ id: 4227 });
+                scoreBoard.post({ 
+                    score: elapsedtime,
+                    name: userInitials
+                }, function (userInitials) {})
+            }); // post to the leaderboard
+            submit.visible = false; // hide the submit button now
+        }
     }
 };
 var play_state = {
     create: function () {
-        var e = this.game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
-        e.onDown.add(this.jump, this);
-        this.space = game.input.keyboard.addKey(Phaser.Keyboard.ESC);
-        this.space.onDown.add(function () {
-            game.paused = !game.paused
-        }, this);
-        this.sky = this.game.add.sprite(0, 0, "sky");
-        this.clouds = game.add.group();
-        this.clouds.createMultiple(20, "cloud");
-        this.ceiling = this.game.add.sprite(0, 0);
-        xVal = 150;
-        yVal = 0;
-        this.game.time.events.add(1e3, this.first_row_of_clouds, this);
-        this.timer = this.game.time.events.loop(2500, this.add_row_of_clouds, this);
-        this.birdy = this.game.add.sprite(100, 200, "birdy");
-        this.birdy.body.gravity.y = 1e3;
-        this.birdy.anchor.setTo(-.2, .5);
-        elapsedtime = 0;
-        this.game.physics.setBoundsToWorld(false, false, true, false)
+        var e = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+        e.onDown.add(this.jump, this); // call jump function when spacebar is pressed
+        game.add.sprite(0, 0, "sky");
+        game.physics.setBoundsToWorld(false, false, true, false); // set boundary for ceiling of game
+        birdy = game.add.sprite(100, 200, "birdy");
+        birdy.body.gravity.y = 1000; 
+        birdy.anchor.setTo(-.2, .5); // set the center of rotation so the flappy motion is smooth
+        clouds = game.add.group();
+        clouds.createMultiple(20, "cloud");
+        game.time.events.add(1000, this.loop_through_clouds, this); // add first group of clouds
+        timer = game.time.events.loop(2500, this.loop_through_clouds, this); // clouds forever!
+        elapsedtime = 0; // game starts now
     },
-    update: function () {
-        if (this.birdy.inWorld == false) this.game_over();
-        if (this.birdy.angle < 20) this.birdy.angle += 1;
-        this.game.physics.overlap(this.birdy, this.clouds, this.hit_cloud, null, this);
-        this.birdy.body.collideWorldBounds = true
+    update: function () { // constantly running function
+        if (birdy.inWorld == false) this.game_over(); // if out of bounds, game over
+        if (birdy.angle < 20) birdy.angle += 1; // tilt birdy down bit by bit (gravity brings it down)
+        game.physics.overlap(birdy, clouds, this.hit_cloud, null, this); // cloud collision!
+        birdy.body.collideWorldBounds = true; // let birdy bounce off the ceiling boundary
     },
-    jump: function () {
-        if (this.birdy.alive == false) return;
-        this.birdy.body.velocity.y = -350;
-        var e = this.game.add.tween(this.birdy);
-        e.to({
-            angle: -20
-        }, 45);
-        e.start()
+    jump: function () { // called when spacebar is pressed
+        if (birdy.alive == false) return; // exit if out of bounds
+        birdy.body.velocity.y = -350; // change y velocity so it moves up quickly
+        var flappy = game.add.tween(birdy); // add flappy motion when birdy jumps
+        flappy.to({ angle: -20 }, 45); // tilt birdy up!
+        flappy.start(); 
     },
     game_over: function () {
-        this.birdy.body.velocity.x = 0;
-        this.birdy.body.velocity.y = 0;
-        elapsedtime = this.game.time.totalElapsedSeconds();
-        elapsedtime = Math.floor(elapsedtime * 1) / 1;
-        this.game.time.reset();
-        this.game.time.events.remove(this.timer);
-        music.stop();
-        this.game.input.keyboard.clearCaptures();
-        this.game.state.start("menu")
+        birdy.body.velocity.x = 0;  //stop birdy from moving
+        birdy.body.velocity.y = 0;
+        elapsedtime = game.time.totalElapsedSeconds(); // get total game time
+        elapsedtime = Math.floor(elapsedtime * 1) / 1; // round to nearest second
+        game.time.reset(); 
+        game.time.events.remove(timer); // clear out timer
+        music.stop(); 
+        game.input.keyboard.clearCaptures(); //stop capturing SpaceBar input
+        game.state.start("menu"); // go back to menu screen
     },
-    add_one_cloud: function (e, t) {
-        var n = this.clouds.getFirstDead();
-        n.reset(e, t);
-        n.body.velocity.x = -150;
-        n.outOfBoundsKill = true
+    add_a_cloud: function (xPos, yPos) {
+        var addCloud = clouds.getFirstDead(); // grab a dead cloud
+        addCloud.reset(xPos, yPos); // make it alive again on the game screen
+        addCloud.body.velocity.x = -150;  // make it move
+        addCloud.outOfBoundsKill = true; // if it goes out of bounds, kill it
     },
-    first_row_of_clouds: function () {
-        for (var e = 0; e < 4; e++) {
+    loop_through_clouds: function() {
+        xVal = 300; // start new clouds at a position of 300px
+        for (i = 0; i < 3; i++) {
             if (xVal < 750) {
-                xVal += 150
-            }
-            yVal = Math.floor(Math.random() * 5) + 1;
-            yVal = yVal * 100;
-            this.add_one_cloud(xVal, yVal)
-        }
-    },
-    add_row_of_clouds: function () {
-        xVal = 300;
-        for (var e = 0; e < 3; e++) {
-            if (xVal < 750) {
-                xVal += 150
+                xVal += 150; // create each new cloud 150px away from the first
             } else {
-                xVal = 450
+                xVal = 450; // if off the screen (past 750), restart at 450px
             }
-            do {
-                nyVal = Math.floor(Math.random() * 6);
-                nyVal = nyVal * 100
-            } while (nyVal == yVal);
-            yVal = nyVal;
-            this.add_one_cloud(xVal, yVal)
+            do { // generate a new height for cloud that isnt same as the previous one
+                newyVal = Math.floor(Math.random() * 6);
+                newyVal = newyVal * 100;
+            } while (newyVal == yVal);
+            yVal = newyVal;
+            this.add_a_cloud(xVal, yVal);
         }
     },
-    hit_cloud: function () {
-        if (this.birdy.alive == false) return;
-        this.birdy.alive = false;
-        this.game.time.events.remove(this.timer);
-        this.clouds.forEachAlive(function (e) {
-            e.body.velocity.x = 0
-        }, this)
+    hit_cloud: function () { // collision between birdy and cloud
+        if (birdy.alive == false) return; 
+        birdy.alive = false;
+        game.time.events.remove(timer);
+        clouds.forEachAlive(function (e) {e.body.velocity.x = 0}, this) // halt all the clouds
     }
 };
+
+
 var game = new Phaser.Game(800, 600, Phaser.AUTO, "game_div");
 var score = 0;
-var button;
-var pbutton;
+var xVal, newyVal;
+var yVal = 0;
+var submit;
+var i;
 var elapsedtime = 0;
 game.state.add("load", load_state);
 game.state.add("menu", menu_state);
 game.state.add("play", play_state);
-game.state.start("load")
+game.state.start("load");
