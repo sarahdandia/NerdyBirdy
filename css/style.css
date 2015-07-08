@@ -885,3 +885,27 @@
 			margin: 0 0 9em 0;
 			font-size: 0.8em;
 		}
+	    #game_div {
+	      font-family: 'Raleway', Arial;
+	      font-weight: normal;
+	      font-size: 1em;
+	      width: 800px;
+	      height: 600px;
+	      margin: 0 auto;
+	      margin-top: 50px;
+	      border: none;
+	    }
+	    #highscores {
+	    	margin-top: 30px;
+	    	background: rgba(252, 56, 89, .85);
+	    }
+	    #FormSend {
+	    	background: #b3e7f4;
+	    }
+	    #FormSend:hover {
+	    	background: #56ceef;
+	    }
+	    #FormFeedback {
+	    	text-align: center;
+	    	margin-top: 10px;
+	    }

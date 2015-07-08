@@ -7,8 +7,6 @@
 		<link href="http://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,300italic" rel="stylesheet" type="text/css" />
 		<link href='http://fonts.googleapis.com/css?family=Raleway' rel='stylesheet' type='text/css'/>
 		<link rel="shortcut icon" href="assets/favicon.ico">
-		<!--[if lte IE 8]><script src="css/ie/html5shiv.js"></script><![endif]-->
-
 		<script src="jquery-1.11.0.min.js"></script>
 		<script src="js/jquery.poptrox.min.js"></script>
 		<script src="js/skel.min.js"></script>
@@ -18,98 +16,55 @@
 			<link rel="stylesheet" href="css/skel-noscript.css" />
 			<link rel="stylesheet" href="css/style.css" />
 		</noscript>
-		<!--[if lte IE 8]><link rel="stylesheet" href="css/ie/v8.css" /><![endif]-->
-  		<script type="text/javascript" src="phaser.min.js"></script>
-    	<script type="text/javascript" src="main.js"></script>
-  		<style>
-	    #game_div {
-	      font-family: 'Raleway', Arial;
-	      font-weight: normal;
-	      font-size: 1em;
-	      width: 800px;
-	      height: 600px;
-	      margin: 0 auto;
-	      margin-top: 50px;
-	      border: none;
-	    }
-	    #highscores {
-	    	margin-top: 30px;
-	    	background: rgba(252, 56, 89, .85);
-	    }
-	    #FormSend {
-	    	background: #b3e7f4;
-	    }
-	    #FormSend:hover {
-	    	background: #56ceef;
-	    }
-	    #FormFeedback {
-	    	text-align: center;
-	    	margin-top: 10px;
-	    }
-  </style>
-  <script type="text/javascript">
-var Clay = Clay || {};
-Clay.gameKey = "nerdybirdy";
-Clay.readyFunctions = [];
-Clay.ready = function( fn ) {
-    Clay.readyFunctions.push( fn );
-};
-( function() {
-    var clay = document.createElement("script"); clay.async = true;
-    clay.src = ( "https:" == document.location.protocol ? "https://" : "http://" ) + "clay.io/api/api.js"; 
-    var tag = document.getElementsByTagName("script")[0]; tag.parentNode.insertBefore(clay, tag);
-} )();
-</script>
+		<script type="text/javascript" src="phaser.min.js"></script>
+  	<script type="text/javascript" src="main.js"></script>
+		<script type="text/javascript" src="js/nbsetup.js"></script>
 	</head>
 	<body>
-
-			<section id="header">
-
-				<header>
-					<img src="assets/bigbirdy1.png"></img>
-					<h1>Nerdy Birdy</h1>
-					<p>the flappy nerd.</p>
-				</header>
-				<footer>
-					<div id="playthegame" class="button style2 wiggle">Play the game</div>
-				</footer>
-			</section>
-
-			<section id="banner">
-				<header>
-					<h2>Nerdy Birdy just wants to fly</h2>
-				</header>
-					<p>...home, to her Javascript tutorials. Or maybe to re-read all seven Harry Potter books.</p>
-				    <p>But some pesky bullies are blocking her way. Help her escape them!</p>
-				    <div id="game_div"></div>
-				    <div id="highscores" class="button style2 wiggle">View High Scores</div>
-			
-			</section>
-		
-			<article class="container box style3">
-				<header>
-					<h2><img style="padding-right: 20px;" src="assets/nerdyface.png"></img>Send Your Feedback</h2>
-					<p>The Nerdy Birdy game is a work in progress. Share your thoughts! </p>
-				</header>
-				<form id="ContactForm">
-					<div class="row half">
-						<div class="6u"><input type="text" class="text" name="name" placeholder="Name" id="FormName" required/></div>
-						<div class="6u"><input type="email" class="text" name="email" placeholder="Email" id="FormEmail" required/></div>
+		<section id="header">
+			<header>
+				<img src="assets/bigbirdy1.png"></img>
+				<h1>Nerdy Birdy</h1>
+				<p>the flappy nerd.</p>
+			</header>
+			<footer>
+				<div id="playthegame" class="button style2 wiggle">Play the game</div>
+			</footer>
+		</section>
+		<section id="banner">
+			<header>
+				<h2>Nerdy Birdy just wants to fly</h2>
+			</header>
+				<p>...home, to her Javascript tutorials. Or maybe to re-read all seven Harry Potter books.</p>
+			  <p>But some pesky bullies are blocking her way. Help her escape them!</p>
+			  <div id="game_div"></div>
+			  <div id="highscores" class="button style2 wiggle">
+			  		View High Scores
+			  </div>
+		</section>
+		<article class="container box style3">
+			<header>
+				<h2><img style="padding-right: 20px;" src="assets/nerdyface.png"></img>Send Your Feedback</h2>
+				<p>The Nerdy Birdy game is a work in progress. Share your thoughts! </p>
+			</header>
+			<form id="ContactForm">
+				<div class="row half">
+					<div class="6u"><input type="text" class="text" name="name" placeholder="Name" id="FormName" required/></div>
+					<div class="6u"><input type="email" class="text" name="email" placeholder="Email" id="FormEmail" required/></div>
+				</div>
+				<div class="row half">
+					<div class="12u">
+						<textarea name="message" placeholder="Two Cents..." id="FormMsg" required></textarea>
 					</div>
-					<div class="row half">
-						<div class="12u">
-							<textarea name="message" placeholder="Two Cents..." id="FormMsg" required></textarea>
-						</div>
+				</div>
+				<div class="row">
+					<div class="-4u 4u">
+						<input type="submit" value="Send" id="FormSend" class="button form wiggle">
 					</div>
-					<div class="row">
-						<div class="-4u 4u">
-							<input type="submit" value="Send" id="FormSend" class="button form wiggle">
-						</div>
-					</div>
-					<div id="FormFeedback"></div>
-				</form>
-			</article>
-		
+				</div>
+				<div id="FormFeedback"></div>
+			</form>
+		</article>
 		<section id="footer">
 			<div class="copyright">
 				<a href="http://www.sarahdandia.com" target="_blank">Built by Sarah</a>
@@ -120,73 +75,14 @@ Clay.ready = function( fn ) {
 				</ul>
 			</div>
 		</section>
-<script>
-	$(document).ready(function() {
-		Clay.ready(function() {
-			var leaderboard = new Clay.Leaderboard({ id: 4227});
-			$('#highscores').click(function() {
-				leaderboard.show( {limit: 10});
-			});
-		});
-	}); 
-</script>
-<script>
-    $(document).ready(function() {
-    	$('#playthegame').click(function() {
-    		$('html, body').animate({
-            scrollTop: $('#banner').offset().top + 65}, 1000)
-    	});
+		<script>
+		  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
 
-       $("#ContactForm").submit(function (event) {
-           event.preventDefault();
-           var dataStr = {
-               "name": $("#FormName").val(),
-               "email": $("#FormEmail").val(),
-               "message": $("#FormMsg").val()
-           };
-           $.ajax({
-               type: "POST",
-               url: "sendmsg.php",
-               data: dataStr,
-               dataType: "json",
-               async: false,
-               success: function (data) {
-                   if (data.success) {
-                       $("#FormSend").attr("value", "Thanks!");
-                       $("#FormSend").attr("disabled", "disabled")
-                   } else {
-                       $("#FormFeedback").html("<p>"+data.message+"</p>");
-                   }
-               },
-               error: function (data) {
-                   $("#FormFeedback").html("<p>Uh oh - Form malfunction! Try email: contact@nerdybirdygame.com</p>");
-                   $("#FormSend").attr("disabled", "disabled")
-               }
-           });
-       })
-   });
-</script> 
-<script>
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-52754263-1', 'auto');
-  ga('send', 'pageview');
-</script>
-<script type="text/javascript">
-  WebFontConfig = {
-    google: { families: [ 'Raleway::latin' ] }
-  };
-  (function() {
-    var wf = document.createElement('script');
-    wf.src = ('https:' == document.location.protocol ? 'https' : 'http') +
-      '://ajax.googleapis.com/ajax/libs/webfont/1/webfont.js';
-    wf.type = 'text/javascript';
-    wf.async = 'true';
-    var s = document.getElementsByTagName('script')[0];
-    s.parentNode.insertBefore(wf, s);
-  })(); </script>
+		  ga('create', 'UA-52754263-1', 'auto');
+		  ga('send', 'pageview');
+		</script>
 	</body>
 </html>
